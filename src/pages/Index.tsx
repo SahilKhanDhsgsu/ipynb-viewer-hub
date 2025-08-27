@@ -58,15 +58,15 @@ const Index = () => {
               <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto mb-20">
                 <div className="glass-effect p-6 rounded-xl hover:bg-surface-elevated/90 transition-all duration-300 hover:scale-105 group">
                   <div className="text-3xl font-bold text-primary mb-2 group-hover:scale-110 transition-transform duration-300">50+</div>
-                  <div className="text-foreground-muted">Interactive Notebooks</div>
+                  <div className="text-muted-foreground">Interactive Notebooks</div>
                 </div>
                 <div className="glass-effect p-6 rounded-xl hover:bg-surface-elevated/90 transition-all duration-300 hover:scale-105 group" style={{ animationDelay: '0.2s' }}>
                   <div className="text-3xl font-bold text-secondary mb-2 group-hover:scale-110 transition-transform duration-300">20+</div>
-                  <div className="text-foreground-muted">Business Problems</div>
+                  <div className="text-muted-foreground">Business Problems</div>
                 </div>
                 <div className="glass-effect p-6 rounded-xl hover:bg-surface-elevated/90 transition-all duration-300 hover:scale-105 group" style={{ animationDelay: '0.4s' }}>
                   <div className="text-3xl font-bold text-accent mb-2 group-hover:scale-110 transition-transform duration-300">30+</div>
-                  <div className="text-foreground-muted">LeetCode Challenges</div>
+                  <div className="text-muted-foreground">LeetCode Challenges</div>
                 </div>
               </div>
             </div>
@@ -82,7 +82,7 @@ const Index = () => {
               <h2 className="text-5xl lg:text-6xl font-bold text-foreground mb-8 bg-gradient-to-r from-foreground via-accent to-foreground bg-clip-text text-transparent">
                 Learn by Doing
               </h2>
-              <p className="text-xl text-foreground-muted max-w-3xl mx-auto leading-relaxed">
+              <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
                 Comprehensive pandas tutorials covering everything from basics to advanced business problems. 
                 Each notebook is crafted with real-world scenarios to accelerate your data science journey.
               </p>
@@ -96,7 +96,7 @@ const Index = () => {
                 <h3 className="text-2xl font-bold text-foreground mb-4 group-hover:text-primary transition-colors duration-300">
                   Interactive Notebooks
                 </h3>
-                <p className="text-foreground-muted leading-relaxed group-hover:text-foreground transition-colors duration-300">
+                <p className="text-muted-foreground leading-relaxed group-hover:text-foreground transition-colors duration-300">
                   Step-by-step tutorials with code examples, detailed outputs, and beautiful visualizations. 
                   Learn pandas concepts through hands-on practice.
                 </p>
@@ -109,7 +109,7 @@ const Index = () => {
                 <h3 className="text-2xl font-bold text-foreground mb-4 group-hover:text-secondary transition-colors duration-300">
                   Real-World Problems
                 </h3>
-                <p className="text-foreground-muted leading-relaxed group-hover:text-foreground transition-colors duration-300">
+                <p className="text-muted-foreground leading-relaxed group-hover:text-foreground transition-colors duration-300">
                   Solve actual business scenarios with GDP analysis, stock market trends, e-commerce insights, 
                   and healthcare data exploration.
                 </p>
@@ -122,7 +122,7 @@ const Index = () => {
                 <h3 className="text-2xl font-bold text-foreground mb-4 group-hover:text-accent transition-colors duration-300">
                   Practice Problems
                 </h3>
-                <p className="text-foreground-muted leading-relaxed group-hover:text-foreground transition-colors duration-300">
+                <p className="text-muted-foreground leading-relaxed group-hover:text-foreground transition-colors duration-300">
                   LeetCode-style challenges designed specifically for pandas. Test your skills and 
                   master data manipulation techniques.
                 </p>
@@ -152,7 +152,7 @@ const Index = () => {
                   Ready to Master Pandas?
                 </h2>
                 
-                <p className="text-xl text-foreground-muted mb-12 max-w-3xl mx-auto leading-relaxed">
+                <p className="text-xl text-muted-foreground mb-12 max-w-3xl mx-auto leading-relaxed">
                   Join thousands of data scientists and analysts who have accelerated their careers 
                   with our comprehensive pandas learning platform. Start your journey today.
                 </p>

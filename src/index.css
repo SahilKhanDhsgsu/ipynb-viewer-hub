@@ -42,6 +42,8 @@
     --border: 220 13% 30%;
     --border-subtle: 220 13% 25%;
     --input: 220 13% 30%;
+    --muted: 220 20% 18%;
+    --muted-foreground: 215 20% 65%;
     
     /* Interactive States */
     --hover: 220 12% 26%;
@@ -109,7 +111,7 @@
   }
 
   .hero-subtitle {
-    @apply text-xl md:text-2xl text-foreground-muted font-medium;
+    @apply text-xl md:text-2xl text-muted-foreground font-medium;
     animation: fade-in-up 0.8s ease-out 0.2s both;
   }
 
@@ -139,7 +141,7 @@
 
   /* Enhanced Navigation Components */
   .nav-link {
-    @apply px-4 py-2 text-foreground-muted hover:text-foreground transition-all duration-300 font-medium relative;
+    @apply px-4 py-2 text-muted-foreground hover:text-foreground transition-all duration-300 font-medium relative;
   }
 
   .nav-link::after {
@@ -180,7 +182,7 @@
 
   /* Enhanced File Tree Components */
   .file-tree-item {
-    @apply flex items-center gap-2 px-3 py-2 text-sm text-foreground-muted;
+    @apply flex items-center gap-2 px-3 py-2 text-sm text-muted-foreground;
     @apply hover:bg-hover hover:text-foreground rounded-md cursor-pointer transition-all duration-200;
     @apply hover:translate-x-1 hover:scale-[1.02];
   }
@@ -205,7 +207,7 @@
   .notebook-markdown {
     @apply prose prose-invert prose-lg max-w-none;
     @apply prose-headings:text-foreground prose-headings:font-bold;
-    @apply prose-p:text-foreground-muted prose-p:leading-relaxed;
+    @apply prose-p:text-muted-foreground prose-p:leading-relaxed;
     @apply prose-code:bg-code-bg prose-code:text-code-keyword prose-code:px-2 prose-code:py-1 prose-code:rounded-md prose-code:text-sm;
     @apply prose-pre:bg-code-bg prose-pre:border prose-pre:border-code-border prose-pre:rounded-lg;
     @apply prose-a:text-accent prose-a:no-underline hover:prose-a:underline hover:prose-a:shadow-lg;
@@ -219,13 +221,13 @@
 
   .code-output {
     @apply bg-surface border border-border rounded-lg p-4 mt-2;
-    @apply font-mono text-sm text-foreground-muted;
+    @apply font-mono text-sm text-muted-foreground;
     @apply hover:bg-surface-elevated transition-all duration-300;
   }
 
   /* Enhanced Table of Contents */
   .toc-item {
-    @apply block px-3 py-1 text-sm text-foreground-muted;
+    @apply block px-3 py-1 text-sm text-muted-foreground;
     @apply hover:text-foreground hover:bg-hover rounded-md transition-all duration-200;
     @apply hover:translate-x-1 hover:scale-[1.01];
   }
@@ -246,7 +248,7 @@
   }
 
   .marquee-content {
-    @apply text-foreground-muted text-sm font-medium;
+    @apply text-muted-foreground text-sm font-medium;
     animation: scroll-left 30s linear infinite;
   }
 
