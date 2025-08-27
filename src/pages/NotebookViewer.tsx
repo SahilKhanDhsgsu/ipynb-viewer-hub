@@ -1,233 +1,205 @@
 
-import React, { useState, useEffect } from 'react';
-import { useParams, useLocation } from 'react-router-dom';
-import FileTree from '@/components/FileTree';
-import NotebookContent from '@/components/NotebookContent';
-import TableOfContents from '@/components/TableOfContents';
-import { Button } from '@/components/ui/button';
-import { Menu, X, BookOpen } from 'lucide-react';
-
-interface NotebookData {
-  cells: any[];
-  metadata?: any;
-}
-
-interface Heading {
-  id: string;
-  text: string;
-  level: number;
-}
+import React, { useState, useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
+import { Header } from "@/components/Header";
+import { FileTree } from "@/components/FileTree"; 
+import { NotebookContent } from "@/components/NotebookContent";
+import { TableOfContents } from "@/components/TableOfContents";
+import { Menu, X, List } from "lucide-react";
 
 const NotebookViewer = () => {
-  const { path } = useParams();
-  const location = useLocation();
-  const [selectedFile, setSelectedFile] = useState<string | null>(null);
-  const [notebookData, setNotebookData] = useState<NotebookData | null>(null);
-  const [headings, setHeadings] = useState<Heading[]>([]);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [selectedNotebook, setSelectedNotebook] = useState<string | null>(
+    searchParams.get("path")
+  );
+  const [notebookContent, setNotebookContent] = useState<any>(null);
+  const [headings, setHeadings] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [leftPanelOpen, setLeftPanelOpen] = useState(false);
-  const [rightPanelOpen, setRightPanelOpen] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [tocOpen, setTocOpen] = useState(false);
 
-  // Handle URL-based file selection
-  useEffect(() => {
-    if (path) {
-      const decodedPath = decodeURIComponent(path);
-      setSelectedFile(decodedPath);
-      loadNotebook(decodedPath);
-    }
-  }, [path]);
-
-  const loadNotebook = async (filePath: string) => {
-    if (!filePath) return;
+  const loadNotebook = async (path: string) => {
+    if (!path) return;
     
     setLoading(true);
     setError(null);
     
     try {
-      // In a real implementation, this would fetch from your GitHub repo
-      // For now, we'll simulate the notebook structure
-      const response = await fetch(`/${filePath}`);
+      const response = await fetch(`/${path}`);
       if (!response.ok) {
-        throw new Error(`Failed to load notebook: ${response.statusText}`);
+        throw new Error(`Failed to load notebook: ${response.status}`);
       }
+      const notebook = await response.json();
+      setNotebookContent(notebook);
       
-      const data = await response.json();
-      setNotebookData(data);
-      
-      // Extract headings for table of contents
-      const extractedHeadings: Heading[] = [];
-      data.cells?.forEach((cell: any, index: number) => {
-        if (cell.cell_type === 'markdown' && cell.source) {
-          const source = Array.isArray(cell.source) ? cell.source.join('') : cell.source;
-          const lines = source.split('\n');
-          
-          lines.forEach((line: string) => {
-            const match = line.match(/^(#{1,6})\s+(.+)$/);
-            if (match) {
-              const level = match[1].length;
-              const text = match[2].trim();
-              const id = `heading-${index}-${text.toLowerCase().replace(/[^a-z0-9]/g, '-')}`;
-              extractedHeadings.push({ id, text, level });
-            }
-          });
-        }
-      });
-      
+      // Extract headings from markdown cells
+      const extractedHeadings = extractHeadings(notebook);
       setHeadings(extractedHeadings);
     } catch (err) {
-      console.error('Error loading notebook:', err);
-      setError(err instanceof Error ? err.message : 'Failed to load notebook');
+      console.error("Error loading notebook:", err);
+      setError(err instanceof Error ? err.message : "Failed to load notebook");
     } finally {
       setLoading(false);
     }
   };
 
-  const handleFileSelect = (filePath: string) => {
-    setSelectedFile(filePath);
-    loadNotebook(filePath);
-    setLeftPanelOpen(false); // Close mobile menu
+  const extractHeadings = (notebook: any): any[] => {
+    const headings: any[] = [];
     
-    // Update URL
-    window.history.pushState(null, '', `#/notebooks/${encodeURIComponent(filePath)}`);
+    notebook.cells?.forEach((cell: any, index: number) => {
+      if (cell.cell_type === "markdown" && cell.source) {
+        const source = Array.isArray(cell.source) ? cell.source.join("") : cell.source;
+        const lines = source.split("\n");
+        
+        lines.forEach((line: string) => {
+          const match = line.match(/^(#{1,6})\s+(.+)/);
+          if (match) {
+            headings.push({
+              level: match[1].length,
+              text: match[2].trim(),
+              id: `heading-${index}-${match[2].trim().toLowerCase().replace(/[^a-z0-9]/g, "-")}`,
+            });
+          }
+        });
+      }
+    });
+    
+    return headings;
   };
 
-  const scrollToHeading = (headingId: string) => {
-    const element = document.getElementById(headingId);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-    }
-    setRightPanelOpen(false); // Close mobile ToC
+  const handleNotebookSelect = (path: string) => {
+    setSelectedNotebook(path);
+    setSearchParams({ path });
+    setSidebarOpen(false);
   };
+
+  useEffect(() => {
+    if (selectedNotebook) {
+      loadNotebook(selectedNotebook);
+    }
+  }, [selectedNotebook]);
 
   return (
-    <div className="flex h-screen bg-background">
-      {/* Mobile Menu Overlay */}
-      {leftPanelOpen && (
-        <div 
-          className="fixed inset-0 bg-black/50 z-40 lg:hidden"
-          onClick={() => setLeftPanelOpen(false)}
-        />
-      )}
+    <div className="min-h-screen bg-background flex flex-col">
+      <Header />
       
-      {/* Left Panel - File Tree */}
-      <aside 
-        className={`
-          fixed lg:relative top-0 left-0 h-full w-80 bg-card border-r border-border z-50
-          transform transition-transform duration-300 ease-in-out lg:transform-none
-          ${leftPanelOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
-        `}
-      >
-        <div className="flex items-center justify-between p-4 border-b border-border lg:hidden">
-          <h2 className="font-semibold">Files</h2>
-          <Button 
-            variant="ghost" 
-            size="sm"
-            onClick={() => setLeftPanelOpen(false)}
-          >
-            <X className="h-4 w-4" />
-          </Button>
-        </div>
+      <div className="flex-1 flex relative">
+        {/* Mobile Sidebar Overlay */}
+        {sidebarOpen && (
+          <div 
+            className="fixed inset-0 bg-background/80 backdrop-blur-sm z-40 lg:hidden"
+            onClick={() => setSidebarOpen(false)}
+          />
+        )}
         
-        <div className="h-full overflow-y-auto scrollbar-thin">
-          <FileTree onFileSelect={handleFileSelect} selectedFile={selectedFile} />
-        </div>
-      </aside>
-
-      {/* Main Content Area */}
-      <main className="flex-1 flex flex-col min-w-0">
-        {/* Mobile Header */}
-        <header className="lg:hidden flex items-center justify-between p-4 border-b border-border bg-card">
-          <Button 
-            variant="ghost" 
-            size="sm"
-            onClick={() => setLeftPanelOpen(true)}
-          >
-            <Menu className="h-4 w-4 mr-2" />
-            Files
-          </Button>
-          
-          {headings.length > 0 && (
-            <Button 
-              variant="ghost" 
-              size="sm"
-              onClick={() => setRightPanelOpen(true)}
+        {/* Left Sidebar - File Tree */}
+        <aside className={`
+          fixed lg:static inset-y-0 left-0 z-50 w-80 bg-surface border-r border-border
+          transform transition-transform duration-300 ease-in-out
+          ${sidebarOpen ? "translate-x-0" : "-translate-x-full"}
+          lg:translate-x-0 flex flex-col
+        `}>
+          <div className="flex items-center justify-between p-4 border-b border-border lg:hidden">
+            <h2 className="font-semibold text-foreground">Files</h2>
+            <button
+              onClick={() => setSidebarOpen(false)}
+              className="p-2 hover:bg-hover rounded-md transition-colors"
             >
-              <BookOpen className="h-4 w-4 mr-2" />
-              Contents
-            </Button>
-          )}
-        </header>
+              <X className="h-5 w-5" />
+            </button>
+          </div>
+          
+          <div className="flex-1 overflow-auto p-4">
+            <FileTree onFileSelect={handleNotebookSelect} selectedPath={selectedNotebook} />
+          </div>
+        </aside>
 
-        {/* Notebook Content */}
-        <div className="flex-1 overflow-hidden">
-          {!selectedFile ? (
-            <div className="h-full flex items-center justify-center bg-muted/30">
-              <div className="text-center max-w-md mx-auto p-8">
-                <BookOpen className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
-                <h2 className="text-title mb-2">Welcome to Pandas Learning Hub</h2>
-                <p className="text-muted-foreground mb-6">
-                  Select a notebook from the file tree to start exploring our comprehensive 
-                  pandas tutorials and real-world examples.
-                </p>
-                <Button 
-                  onClick={() => setLeftPanelOpen(true)}
-                  className="lg:hidden"
-                >
-                  <Menu className="h-4 w-4 mr-2" />
-                  Browse Files
-                </Button>
+        {/* Main Content */}
+        <main className="flex-1 flex flex-col min-w-0">
+          {/* Mobile Header */}
+          <div className="flex items-center justify-between p-4 border-b border-border lg:hidden">
+            <button
+              onClick={() => setSidebarOpen(true)}
+              className="p-2 hover:bg-hover rounded-md transition-colors"
+            >
+              <Menu className="h-5 w-5" />
+            </button>
+            <button
+              onClick={() => setTocOpen(!tocOpen)}
+              className="p-2 hover:bg-hover rounded-md transition-colors"
+            >
+              <List className="h-5 w-5" />
+            </button>
+          </div>
+          
+          <div className="flex-1 flex">
+            {/* Notebook Content */}
+            <div className="flex-1 overflow-auto">
+              <div className="max-w-4xl mx-auto p-6 lg:p-8">
+                {loading && (
+                  <div className="flex items-center justify-center py-20">
+                    <div className="loading-spinner" />
+                    <span className="ml-3 text-foreground-muted">Loading notebook...</span>
+                  </div>
+                )}
+                
+                {error && (
+                  <div className="card-default p-8 text-center">
+                    <p className="text-error mb-4">Error loading notebook</p>
+                    <p className="text-foreground-muted text-sm">{error}</p>
+                  </div>
+                )}
+                
+                {!selectedNotebook && !loading && (
+                  <div className="text-center py-20">
+                    <h2 className="text-2xl font-bold text-foreground mb-4">
+                      Select a Notebook
+                    </h2>
+                    <p className="text-foreground-muted">
+                      Choose a notebook from the file tree to start exploring
+                    </p>
+                  </div>
+                )}
+                
+                {notebookContent && !loading && (
+                  <NotebookContent notebook={notebookContent} headings={headings} />
+                )}
               </div>
             </div>
-          ) : (
-            <NotebookContent 
-              notebookData={notebookData}
-              loading={loading}
-              error={error}
-              headings={headings}
-            />
-          )}
-        </div>
-      </main>
-
-      {/* Right Panel - Table of Contents */}
-      {headings.length > 0 && (
-        <>
-          {/* Mobile ToC Overlay */}
-          {rightPanelOpen && (
-            <div 
-              className="fixed inset-0 bg-black/50 z-40 lg:hidden"
-              onClick={() => setRightPanelOpen(false)}
-            />
-          )}
-          
-          <aside 
-            className={`
-              fixed lg:relative top-0 right-0 h-full w-80 bg-card border-l border-border z-50
-              transform transition-transform duration-300 ease-in-out lg:transform-none
-              ${rightPanelOpen ? 'translate-x-0' : 'translate-x-full lg:translate-x-0'}
-            `}
-          >
-            <div className="flex items-center justify-between p-4 border-b border-border lg:hidden">
-              <h2 className="font-semibold">Contents</h2>
-              <Button 
-                variant="ghost" 
-                size="sm"
-                onClick={() => setRightPanelOpen(false)}
-              >
-                <X className="h-4 w-4" />
-              </Button>
-            </div>
             
-            <div className="h-full overflow-y-auto scrollbar-thin">
-              <TableOfContents 
-                headings={headings} 
-                onHeadingClick={scrollToHeading}
-              />
-            </div>
-          </aside>
-        </>
-      )}
+            {/* Right Sidebar - Table of Contents */}
+            <aside className={`
+              fixed lg:static inset-y-0 right-0 z-50 w-80 bg-surface border-l border-border
+              transform transition-transform duration-300 ease-in-out
+              ${tocOpen ? "translate-x-0" : "translate-x-full"}
+              lg:translate-x-0 flex flex-col
+            `}>
+              <div className="flex items-center justify-between p-4 border-b border-border lg:hidden">
+                <h2 className="font-semibold text-foreground">Contents</h2>
+                <button
+                  onClick={() => setTocOpen(false)}
+                  className="p-2 hover:bg-hover rounded-md transition-colors"
+                >
+                  <X className="h-5 w-5" />
+                </button>
+              </div>
+              
+              <div className="flex-1 overflow-auto p-4">
+                <TableOfContents headings={headings} />
+              </div>
+            </aside>
+          </div>
+        </main>
+        
+        {/* Mobile ToC Overlay */}
+        {tocOpen && (
+          <div 
+            className="fixed inset-0 bg-background/80 backdrop-blur-sm z-40 lg:hidden"
+            onClick={() => setTocOpen(false)}
+          />
+        )}
+      </div>
     </div>
   );
 };
