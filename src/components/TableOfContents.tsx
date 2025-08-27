@@ -50,9 +50,9 @@ export const TableOfContents: React.FC<TableOfContentsProps> = ({ headings }) =>
 
   if (headings.length === 0) {
     return (
-      <div className="text-center py-8">
-        <p className="text-foreground-muted text-sm">
-          No headings found in this notebook
+      <div className="text-center py-6">
+        <p className="text-muted-foreground text-xs">
+          No headings found
         </p>
       </div>
     );
@@ -60,22 +60,28 @@ export const TableOfContents: React.FC<TableOfContentsProps> = ({ headings }) =>
 
   return (
     <div className="space-y-1">
-      <div className="text-sm font-semibold text-foreground mb-4 px-3">
-        Table of Contents
+      <div className="text-xs font-medium text-foreground mb-3 px-2 uppercase tracking-wider">
+        Contents
       </div>
       
-      <nav className="space-y-1">
+      <nav className="space-y-0.5">
         {headings.map((heading, index) => (
           <button
             key={index}
             onClick={() => scrollToHeading(heading.id)}
             className={`
-              toc-item w-full text-left transition-all duration-150
-              toc-heading-${heading.level}
-              ${activeHeading === heading.id ? "toc-item-active" : ""}
+              w-full text-left text-xs py-1.5 px-2 rounded transition-all duration-150 hover:bg-hover
+              ${heading.level === 1 ? "font-medium" : ""}
+              ${heading.level === 2 ? "ml-2" : ""}
+              ${heading.level === 3 ? "ml-4" : ""}
+              ${heading.level >= 4 ? "ml-6" : ""}
+              ${activeHeading === heading.id 
+                ? "bg-accent/10 text-accent border-l-2 border-accent" 
+                : "text-muted-foreground hover:text-foreground"
+              }
             `}
           >
-            <span className="truncate block">{heading.text}</span>
+            <span className="truncate block leading-relaxed">{heading.text}</span>
           </button>
         ))}
       </nav>

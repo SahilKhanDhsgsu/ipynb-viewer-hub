@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import { Header } from "@/components/Header";
@@ -93,24 +92,24 @@ const NotebookViewer = () => {
           />
         )}
         
-        {/* Left Sidebar - File Tree */}
+        {/* Left Sidebar - File Tree - Reduced Width */}
         <aside className={`
-          fixed lg:static inset-y-0 left-0 z-50 w-80 bg-surface border-r border-border
+          fixed lg:static inset-y-0 left-0 z-50 w-64 bg-surface border-r border-border
           transform transition-transform duration-300 ease-in-out
           ${sidebarOpen ? "translate-x-0" : "-translate-x-full"}
           lg:translate-x-0 flex flex-col
         `}>
-          <div className="flex items-center justify-between p-4 border-b border-border lg:hidden">
-            <h2 className="font-semibold text-foreground">Files</h2>
+          <div className="flex items-center justify-between p-3 border-b border-border lg:hidden">
+            <h2 className="font-medium text-foreground text-sm">Files</h2>
             <button
               onClick={() => setSidebarOpen(false)}
-              className="p-2 hover:bg-hover rounded-md transition-colors"
+              className="p-1.5 hover:bg-hover rounded-md transition-colors"
             >
-              <X className="h-5 w-5" />
+              <X className="h-4 w-4" />
             </button>
           </div>
           
-          <div className="flex-1 overflow-auto p-4">
+          <div className="flex-1 overflow-auto p-3">
             <FileTree onFileSelect={handleNotebookSelect} selectedPath={selectedNotebook} />
           </div>
         </aside>
@@ -118,45 +117,47 @@ const NotebookViewer = () => {
         {/* Main Content */}
         <main className="flex-1 flex flex-col min-w-0">
           {/* Mobile Header */}
-          <div className="flex items-center justify-between p-4 border-b border-border lg:hidden">
+          <div className="flex items-center justify-between p-3 border-b border-border lg:hidden bg-surface">
             <button
               onClick={() => setSidebarOpen(true)}
-              className="p-2 hover:bg-hover rounded-md transition-colors"
+              className="p-1.5 hover:bg-hover rounded-md transition-colors"
             >
-              <Menu className="h-5 w-5" />
+              <Menu className="h-4 w-4" />
             </button>
-            <button
-              onClick={() => setTocOpen(!tocOpen)}
-              className="p-2 hover:bg-hover rounded-md transition-colors"
-            >
-              <List className="h-5 w-5" />
-            </button>
+            {notebookContent && (
+              <button
+                onClick={() => setTocOpen(!tocOpen)}
+                className="p-1.5 hover:bg-hover rounded-md transition-colors"
+              >
+                <List className="h-4 w-4" />
+              </button>
+            )}
           </div>
           
           <div className="flex-1 flex">
             {/* Notebook Content */}
             <div className="flex-1 overflow-auto">
-              <div className="max-w-4xl mx-auto p-6 lg:p-8">
+              <div className="max-w-5xl mx-auto p-4 lg:p-6">
                 {loading && (
-                  <div className="flex items-center justify-center py-20">
+                  <div className="flex items-center justify-center py-16">
                     <div className="loading-spinner" />
-                    <span className="ml-3 text-foreground-muted">Loading notebook...</span>
+                    <span className="ml-3 text-muted-foreground text-sm">Loading notebook...</span>
                   </div>
                 )}
                 
                 {error && (
-                  <div className="card-default p-8 text-center">
-                    <p className="text-error mb-4">Error loading notebook</p>
-                    <p className="text-foreground-muted text-sm">{error}</p>
+                  <div className="card-default p-6 text-center">
+                    <p className="text-destructive mb-2 text-sm font-medium">Error loading notebook</p>
+                    <p className="text-muted-foreground text-xs">{error}</p>
                   </div>
                 )}
                 
                 {!selectedNotebook && !loading && (
-                  <div className="text-center py-20">
-                    <h2 className="text-2xl font-bold text-foreground mb-4">
+                  <div className="text-center py-16">
+                    <h2 className="text-xl font-semibold text-foreground mb-2">
                       Select a Notebook
                     </h2>
-                    <p className="text-foreground-muted">
+                    <p className="text-muted-foreground text-sm">
                       Choose a notebook from the file tree to start exploring
                     </p>
                   </div>
@@ -168,27 +169,29 @@ const NotebookViewer = () => {
               </div>
             </div>
             
-            {/* Right Sidebar - Table of Contents */}
-            <aside className={`
-              fixed lg:static inset-y-0 right-0 z-50 w-80 bg-surface border-l border-border
-              transform transition-transform duration-300 ease-in-out
-              ${tocOpen ? "translate-x-0" : "translate-x-full"}
-              lg:translate-x-0 flex flex-col
-            `}>
-              <div className="flex items-center justify-between p-4 border-b border-border lg:hidden">
-                <h2 className="font-semibold text-foreground">Contents</h2>
-                <button
-                  onClick={() => setTocOpen(false)}
-                  className="p-2 hover:bg-hover rounded-md transition-colors"
-                >
-                  <X className="h-5 w-5" />
-                </button>
-              </div>
-              
-              <div className="flex-1 overflow-auto p-4">
-                <TableOfContents headings={headings} />
-              </div>
-            </aside>
+            {/* Right Sidebar - Table of Contents - Reduced Width */}
+            {notebookContent && (
+              <aside className={`
+                fixed lg:static inset-y-0 right-0 z-50 w-56 bg-surface border-l border-border
+                transform transition-transform duration-300 ease-in-out
+                ${tocOpen ? "translate-x-0" : "translate-x-full"}
+                lg:translate-x-0 flex flex-col
+              `}>
+                <div className="flex items-center justify-between p-3 border-b border-border lg:hidden">
+                  <h2 className="font-medium text-foreground text-sm">Contents</h2>
+                  <button
+                    onClick={() => setTocOpen(false)}
+                    className="p-1.5 hover:bg-hover rounded-md transition-colors"
+                  >
+                    <X className="h-4 w-4" />
+                  </button>
+                </div>
+                
+                <div className="flex-1 overflow-auto p-3">
+                  <TableOfContents headings={headings} />
+                </div>
+              </aside>
+            )}
           </div>
         </main>
         
