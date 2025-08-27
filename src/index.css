@@ -119,7 +119,7 @@
     @apply inline-flex items-center justify-center px-8 py-4 bg-primary text-primary-foreground font-semibold rounded-lg;
     @apply hover:bg-primary-hover transform hover:scale-105 transition-all duration-300;
     @apply shadow-lg hover:shadow-xl hover:shadow-primary/25;
-    @apply relative overflow-hidden group;
+    @apply relative overflow-hidden;
   }
 
   .hero-button::before {
