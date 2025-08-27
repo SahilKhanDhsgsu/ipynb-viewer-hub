@@ -76,90 +76,130 @@
     font-feature-settings: "cv02", "cv03", "cv04", "cv11";
   }
 
-  /* Scrollbar Styling */
+  /* Enhanced Scrollbar Styling */
   ::-webkit-scrollbar {
     @apply w-2;
   }
 
   ::-webkit-scrollbar-track {
-    @apply bg-surface;
+    @apply bg-surface rounded-full;
   }
 
   ::-webkit-scrollbar-thumb {
     @apply bg-border rounded-full;
+    transition: all 0.3s ease;
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    @apply bg-foreground-subtle;
+    @apply bg-accent/60;
+    transform: scaleY(1.1);
   }
 }
 
 @layer components {
-  /* Hero Components */
+  /* Hero Components with Enhanced Animations */
   .hero-title {
     @apply text-6xl md:text-7xl lg:text-8xl font-bold;
-    background: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--secondary)));
+    background: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--secondary)), hsl(var(--accent)));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
+    background-size: 200% 200%;
+    animation: gradient-shift 8s ease-in-out infinite;
   }
 
   .hero-subtitle {
     @apply text-xl md:text-2xl text-foreground-muted font-medium;
+    animation: fade-in-up 0.8s ease-out 0.2s both;
   }
 
   .hero-button {
     @apply inline-flex items-center justify-center px-8 py-4 bg-primary text-primary-foreground font-semibold rounded-lg;
-    @apply hover:bg-primary-hover transform hover:scale-105 transition-all duration-200;
-    @apply shadow-lg hover:shadow-xl;
+    @apply hover:bg-primary-hover transform hover:scale-105 transition-all duration-300;
+    @apply shadow-lg hover:shadow-xl hover:shadow-primary/25;
+    @apply relative overflow-hidden group;
+  }
+
+  .hero-button::before {
+    @apply absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent;
+    content: '';
+    transform: translateX(-100%);
+    transition: transform 0.6s ease;
+  }
+
+  .hero-button:hover::before {
+    transform: translateX(100%);
   }
 
   .hero-button-secondary {
     @apply inline-flex items-center justify-center px-8 py-4 bg-surface-elevated border border-border text-foreground font-semibold rounded-lg;
-    @apply hover:bg-surface-overlay hover:border-accent transition-all duration-200;
+    @apply hover:bg-surface-overlay hover:border-accent/50 hover:shadow-lg hover:shadow-accent/10 transition-all duration-300;
+    @apply hover:scale-105 transform;
   }
 
-  /* Navigation Components */
+  /* Enhanced Navigation Components */
   .nav-link {
-    @apply px-4 py-2 text-foreground-muted hover:text-foreground transition-colors duration-200 font-medium;
+    @apply px-4 py-2 text-foreground-muted hover:text-foreground transition-all duration-300 font-medium relative;
+  }
+
+  .nav-link::after {
+    @apply absolute bottom-0 left-0 h-0.5 bg-accent;
+    content: '';
+    width: 0;
+    transition: width 0.3s ease;
+  }
+
+  .nav-link:hover::after {
+    width: 100%;
   }
 
   .nav-link-active {
-    @apply text-primary border-b-2 border-primary;
+    @apply text-accent;
   }
 
-  /* Card Components */
+  .nav-link-active::after {
+    width: 100%;
+  }
+
+  /* Enhanced Card Components */
   .card-default {
     @apply bg-card border border-border rounded-lg shadow-md;
+    @apply hover:shadow-lg hover:shadow-accent/5 transition-all duration-300;
   }
 
   .card-elevated {
     @apply bg-card-elevated border border-border rounded-lg shadow-lg;
+    @apply hover:shadow-xl hover:shadow-accent/10 transition-all duration-300;
   }
 
   .card-interactive {
     @apply bg-card border border-border rounded-lg shadow-md;
-    @apply hover:shadow-lg hover:border-accent/50 transition-all duration-200;
+    @apply hover:shadow-xl hover:border-accent/50 hover:scale-[1.02] transition-all duration-300;
+    @apply hover:bg-card-elevated;
   }
 
-  /* File Tree Components */
+  /* Enhanced File Tree Components */
   .file-tree-item {
     @apply flex items-center gap-2 px-3 py-2 text-sm text-foreground-muted;
-    @apply hover:bg-hover hover:text-foreground rounded-md cursor-pointer transition-all duration-150;
+    @apply hover:bg-hover hover:text-foreground rounded-md cursor-pointer transition-all duration-200;
+    @apply hover:translate-x-1 hover:scale-[1.02];
   }
 
   .file-tree-item-active {
-    @apply bg-accent/10 text-accent border-r-2 border-accent;
+    @apply bg-accent/20 text-accent border-r-2 border-accent;
+    @apply shadow-lg shadow-accent/10;
   }
 
   .file-tree-folder {
     @apply flex items-center gap-2 px-3 py-2 text-sm font-medium text-foreground;
-    @apply hover:bg-hover rounded-md cursor-pointer transition-all duration-150;
+    @apply hover:bg-hover rounded-md cursor-pointer transition-all duration-200;
+    @apply hover:shadow-md hover:scale-[1.01];
   }
 
-  /* Notebook Content Components */
+  /* Enhanced Notebook Content Components */
   .notebook-cell {
     @apply mb-6 last:mb-0;
+    animation: slide-in-left 0.6s ease-out;
   }
 
   .notebook-markdown {
@@ -168,27 +208,31 @@
     @apply prose-p:text-foreground-muted prose-p:leading-relaxed;
     @apply prose-code:bg-code-bg prose-code:text-code-keyword prose-code:px-2 prose-code:py-1 prose-code:rounded-md prose-code:text-sm;
     @apply prose-pre:bg-code-bg prose-pre:border prose-pre:border-code-border prose-pre:rounded-lg;
-    @apply prose-a:text-accent prose-a:no-underline hover:prose-a:underline;
+    @apply prose-a:text-accent prose-a:no-underline hover:prose-a:underline hover:prose-a:shadow-lg;
   }
 
   .code-block {
     @apply bg-code-bg border border-code-border rounded-lg p-4 overflow-x-auto;
-    @apply font-mono text-sm leading-relaxed;
+    @apply font-mono text-sm leading-relaxed shadow-lg;
+    @apply hover:shadow-xl hover:shadow-accent/5 transition-all duration-300;
   }
 
   .code-output {
     @apply bg-surface border border-border rounded-lg p-4 mt-2;
     @apply font-mono text-sm text-foreground-muted;
+    @apply hover:bg-surface-elevated transition-all duration-300;
   }
 
-  /* Table of Contents */
+  /* Enhanced Table of Contents */
   .toc-item {
     @apply block px-3 py-1 text-sm text-foreground-muted;
-    @apply hover:text-foreground hover:bg-hover rounded-md transition-all duration-150;
+    @apply hover:text-foreground hover:bg-hover rounded-md transition-all duration-200;
+    @apply hover:translate-x-1 hover:scale-[1.01];
   }
 
   .toc-item-active {
     @apply text-accent bg-accent/10 border-r-2 border-accent;
+    @apply shadow-md shadow-accent/10;
   }
 
   .toc-heading-1 { @apply font-semibold; }
@@ -196,9 +240,9 @@
   .toc-heading-3 { @apply ml-6; }
   .toc-heading-4 { @apply ml-9; }
 
-  /* Marquee */
+  /* Enhanced Marquee */
   .marquee {
-    @apply bg-surface-elevated border-b border-border px-4 py-2;
+    @apply bg-gradient-to-r from-surface-elevated via-surface-overlay to-surface-elevated border-b border-border px-4 py-2;
   }
 
   .marquee-content {
@@ -210,42 +254,69 @@
     animation-play-state: paused;
   }
 
-  /* Loading States */
+  /* Enhanced Loading States */
   .loading-skeleton {
     @apply bg-surface-elevated animate-pulse rounded;
+    background: linear-gradient(90deg, hsl(var(--surface-elevated)) 25%, hsl(var(--surface-overlay)) 50%, hsl(var(--surface-elevated)) 75%);
+    background-size: 200% 100%;
+    animation: loading-shimmer 1.5s infinite;
   }
 
   .loading-spinner {
     @apply w-6 h-6 border-2 border-border border-t-accent rounded-full animate-spin;
+    @apply shadow-lg shadow-accent/20;
   }
 
-  /* Animations */
-  .fade-in {
-    animation: fadeIn 0.6s ease-out forwards;
+  /* Enhanced Buttons */
+  .button-glow {
+    @apply relative overflow-hidden;
   }
 
-  .slide-up {
-    animation: slideUp 0.8s ease-out forwards;
-  }
-
-  .scale-in {
-    animation: scaleIn 0.4s ease-out forwards;
+  .button-glow::before {
+    @apply absolute -inset-0.5 bg-gradient-to-r from-primary via-accent to-secondary rounded-lg opacity-75;
+    content: '';
+    filter: blur(4px);
+    z-index: -1;
+    animation: glow-pulse 2s ease-in-out infinite alternate;
   }
 }
 
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
+/* Enhanced Keyframes */
+@keyframes gradient-shift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
 }
 
-@keyframes slideUp {
-  from { opacity: 0; transform: translateY(40px); }
-  to { opacity: 1; transform: translateY(0); }
+@keyframes fade-in-up {
+  from { 
+    opacity: 0; 
+    transform: translateY(30px); 
+  }
+  to { 
+    opacity: 1; 
+    transform: translateY(0); 
+  }
 }
 
-@keyframes scaleIn {
-  from { opacity: 0; transform: scale(0.95); }
-  to { opacity: 1; transform: scale(1); }
+@keyframes slide-in-left {
+  from { 
+    opacity: 0; 
+    transform: translateX(-20px); 
+  }
+  to { 
+    opacity: 1; 
+    transform: translateX(0); 
+  }
+}
+
+@keyframes loading-shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@keyframes glow-pulse {
+  0% { opacity: 0.5; }
+  100% { opacity: 1; }
 }
 
 @keyframes scroll-left {
@@ -253,7 +324,7 @@
   100% { transform: translateX(-100%); }
 }
 
-/* Responsive Typography */
+/* Responsive Typography with Enhanced Animations */
 @screen sm {
   .hero-title { @apply text-7xl; }
 }
@@ -266,3 +337,41 @@
 @screen lg {
   .hero-title { @apply text-9xl; }
 }
+
+/* Custom Selection Colors */
+::selection {
+  background: hsl(var(--accent) / 0.3);
+  color: hsl(var(--foreground));
+}
+
+/* Enhanced Focus States */
+:focus-visible {
+  @apply ring-2 ring-accent ring-offset-2 ring-offset-background outline-none;
+}
+
+/* Glassmorphism Effect */
+.glass-effect {
+  @apply bg-surface/80 backdrop-blur-md border border-border/50;
+}
+
+/* Floating Animation */
+.float {
+  animation: float 6s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+/* Stagger Animations */
+.stagger-animation > * {
+  opacity: 0;
+  animation: fade-in-up 0.6s ease-out forwards;
+}
+
+.stagger-animation > *:nth-child(1) { animation-delay: 0.1s; }
+.stagger-animation > *:nth-child(2) { animation-delay: 0.2s; }
+.stagger-animation > *:nth-child(3) { animation-delay: 0.3s; }
+.stagger-animation > *:nth-child(4) { animation-delay: 0.4s; }
+.stagger-animation > *:nth-child(5) { animation-delay: 0.5s; }
