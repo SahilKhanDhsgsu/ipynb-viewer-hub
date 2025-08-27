@@ -80,10 +80,10 @@ const NotebookViewer = () => {
   }, [selectedNotebook]);
 
   return (
-    <div className="min-h-screen bg-background flex flex-col">
+    <div className="h-screen bg-background flex flex-col">
       <Header />
       
-      <div className="flex-1 flex relative">
+      <div className="flex-1 flex overflow-hidden">
         {/* Mobile Sidebar Overlay */}
         {sidebarOpen && (
           <div 
@@ -92,72 +92,73 @@ const NotebookViewer = () => {
           />
         )}
         
-        {/* Left Sidebar - File Tree - Reduced Width */}
+        {/* Left Sidebar - File Tree - Fixed Height */}
         <aside className={`
-          fixed lg:static inset-y-0 left-0 z-50 w-64 bg-surface border-r border-border
+          fixed lg:static top-0 bottom-0 left-0 z-50 w-64 bg-surface border-r border-border
           transform transition-transform duration-300 ease-in-out
           ${sidebarOpen ? "translate-x-0" : "-translate-x-full"}
           lg:translate-x-0 flex flex-col
+          lg:mt-0 mt-16
         `}>
-          <div className="flex items-center justify-between p-3 border-b border-border lg:hidden">
-            <h2 className="font-medium text-foreground text-sm">Files</h2>
+          <div className="flex items-center justify-between p-4 border-b border-border lg:hidden min-h-[60px]">
+            <h2 className="font-medium text-foreground">Files</h2>
             <button
               onClick={() => setSidebarOpen(false)}
-              className="p-1.5 hover:bg-hover rounded-md transition-colors"
+              className="p-2 hover:bg-hover rounded-lg transition-colors"
             >
               <X className="h-4 w-4" />
             </button>
           </div>
           
-          <div className="flex-1 overflow-auto p-3">
+          <div className="flex-1 overflow-y-auto p-4">
             <FileTree onFileSelect={handleNotebookSelect} selectedPath={selectedNotebook} />
           </div>
         </aside>
 
-        {/* Main Content */}
+        {/* Main Content - Scrollable */}
         <main className="flex-1 flex flex-col min-w-0">
-          {/* Mobile Header */}
-          <div className="flex items-center justify-between p-3 border-b border-border lg:hidden bg-surface">
+          {/* Mobile Header - Fixed */}
+          <div className="flex items-center justify-between p-4 border-b border-border lg:hidden bg-surface/95 backdrop-blur-sm sticky top-0 z-30">
             <button
               onClick={() => setSidebarOpen(true)}
-              className="p-1.5 hover:bg-hover rounded-md transition-colors"
+              className="p-2 hover:bg-hover rounded-lg transition-colors"
             >
               <Menu className="h-4 w-4" />
             </button>
             {notebookContent && (
               <button
                 onClick={() => setTocOpen(!tocOpen)}
-                className="p-1.5 hover:bg-hover rounded-md transition-colors"
+                className="p-2 hover:bg-hover rounded-lg transition-colors"
               >
                 <List className="h-4 w-4" />
               </button>
             )}
           </div>
           
-          <div className="flex-1 flex">
-            {/* Notebook Content */}
-            <div className="flex-1 overflow-auto">
-              <div className="max-w-5xl mx-auto p-4 lg:p-6">
+          <div className="flex-1 flex min-h-0">
+            {/* Notebook Content - Scrollable Area */}
+            <div className="flex-1 overflow-y-auto">
+              <div className="max-w-4xl mx-auto p-6 lg:p-8">
                 {loading && (
-                  <div className="flex items-center justify-center py-16">
+                  <div className="flex items-center justify-center py-20">
                     <div className="loading-spinner" />
-                    <span className="ml-3 text-muted-foreground text-sm">Loading notebook...</span>
+                    <span className="ml-3 text-muted-foreground">Loading notebook...</span>
                   </div>
                 )}
                 
                 {error && (
-                  <div className="card-default p-6 text-center">
-                    <p className="text-destructive mb-2 text-sm font-medium">Error loading notebook</p>
-                    <p className="text-muted-foreground text-xs">{error}</p>
+                  <div className="card-default p-8 text-center">
+                    <p className="text-destructive mb-2 font-medium">Error loading notebook</p>
+                    <p className="text-muted-foreground text-sm">{error}</p>
                   </div>
                 )}
                 
                 {!selectedNotebook && !loading && (
-                  <div className="text-center py-16">
-                    <h2 className="text-xl font-semibold text-foreground mb-2">
+                  <div className="text-center py-20">
+                    <h2 className="text-2xl font-semibold text-foreground mb-3">
                       Select a Notebook
                     </h2>
-                    <p className="text-muted-foreground text-sm">
+                    <p className="text-muted-foreground">
                       Choose a notebook from the file tree to start exploring
                     </p>
                   </div>
@@ -169,25 +170,26 @@ const NotebookViewer = () => {
               </div>
             </div>
             
-            {/* Right Sidebar - Table of Contents - Reduced Width */}
+            {/* Right Sidebar - Table of Contents - Fixed Height */}
             {notebookContent && (
               <aside className={`
-                fixed lg:static inset-y-0 right-0 z-50 w-56 bg-surface border-l border-border
+                fixed lg:static top-0 bottom-0 right-0 z-50 w-56 bg-surface border-l border-border
                 transform transition-transform duration-300 ease-in-out
                 ${tocOpen ? "translate-x-0" : "translate-x-full"}
                 lg:translate-x-0 flex flex-col
+                lg:mt-0 mt-16
               `}>
-                <div className="flex items-center justify-between p-3 border-b border-border lg:hidden">
-                  <h2 className="font-medium text-foreground text-sm">Contents</h2>
+                <div className="flex items-center justify-between p-4 border-b border-border lg:hidden min-h-[60px]">
+                  <h2 className="font-medium text-foreground">Contents</h2>
                   <button
                     onClick={() => setTocOpen(false)}
-                    className="p-1.5 hover:bg-hover rounded-md transition-colors"
+                    className="p-2 hover:bg-hover rounded-lg transition-colors"
                   >
                     <X className="h-4 w-4" />
                   </button>
                 </div>
                 
-                <div className="flex-1 overflow-auto p-3">
+                <div className="flex-1 overflow-y-auto p-4">
                   <TableOfContents headings={headings} />
                 </div>
               </aside>
