@@ -1,0 +1,53 @@
+
+{
+  "advanced": {},
+  "beginner": {},
+  "business_problems": {},
+  "intermediate": {
+    "6_filtering_sorting": "intermediate/6_filtering_sorting.ipynb",
+    "7_grouping_aggregation": "intermediate/7_grouping_aggregation.ipynb",
+    "8_merging_joining": "intermediate/8_merging_joining.ipynb",
+    "9_applying_functions": "intermediate/9_applying_functions.ipynb"
+  },
+  "leetcode-30-days": {
+    "595_big_countries": "leetcode-30-days/595_big_countries.ipynb",
+    "1757_recyclable_low_fat": "leetcode-30-days/1757_recyclable_low_fat.ipynb"
+  },
+  "leetcode-pandas-basics": {
+    "2877_create_dataframe_from_list": "leetcode-pandas-basics/2877_create_dataframe_from_list.ipynb",
+    "2878_get_first_three_rows": "leetcode-pandas-basics/2878_get_first_three_rows.ipynb"
+  },
+  "pandas_playbook": {
+    "beginner": {
+      "1_dataframes_series": "pandas_playbook/beginner/1_dataframes_series.ipynb",
+      "2_reading_writing_data": "pandas_playbook/beginner/2_reading_writing_data.ipynb"
+    },
+    "business_problems": {
+      "01_gdp_growth_trends": "pandas_playbook/business_problems/01_gdp_growth_trends.ipynb",
+      "02_lowest_gdp_growth_trends": "pandas_playbook/business_problems/02_lowest_gdp_growth_trends.ipynb",
+      "03_economic_recession_analysis": "pandas_playbook/business_problems/03_economic_recession_analysis.ipynb",
+      "04_gdp_per_region": "pandas_playbook/business_problems/04_gdp_per_region.ipynb",
+      "05_amazon_product_performance": "pandas_playbook/business_problems/05_amazon_product_performance.ipynb",
+      "06_discount_impact_analysis": "pandas_playbook/business_problems/06_discount_impact_analysis.ipynb",
+      "07_category_sales_insights": "pandas_playbook/business_problems/07_category_sales_insights.ipynb",
+      "08_customer_review_sentiment": "pandas_playbook/business_problems/08_customer_review_sentiment.ipynb",
+      "09_amazon_price_optimization": "pandas_playbook/business_problems/09_amazon_price_optimization.ipynb",
+      "10_cancer_diagnosis_patterns": "pandas_playbook/business_problems/10_cancer_diagnosis_patterns.ipynb",
+      "11_cancer_feature_correlation": "pandas_playbook/business_problems/11_cancer_feature_correlation.ipynb",
+      "12_cancer_data_cleaning": "pandas_playbook/business_problems/12_cancer_data_cleaning.ipynb",
+      "13_stock_price_trends": "pandas_playbook/business_problems/13_stock_price_trends.ipynb",
+      "14_stock_volatility_analysis": "pandas_playbook/business_problems/14_stock_volatility_analysis.ipynb",
+      "15_portfolio_performance": "pandas_playbook/business_problems/15_portfolio_performance.ipynb",
+      "16_stock_volume_trends": "pandas_playbook/business_problems/16_stock_volume_trends.ipynb",
+      "17_sector_performance": "pandas_playbook/business_problems/17_sector_performance.ipynb",
+      "18_stock_price_anomalies": "pandas_playbook/business_problems/18_stock_price_anomalies.ipynb",
+      "19_gdp_vs_stock_market": "pandas_playbook/business_problems/19_gdp_vs_stock_market.ipynb",
+      "20_ecommerce_vs_economic_trends": "pandas_playbook/business_problems/20_ecommerce_vs_economic_trends.ipynb"
+    }
+  },
+  "projects": {
+    "gdp_analysis": {},
+    "sales_analysis": {},
+    "titanic_eda": {}
+  }
+}
