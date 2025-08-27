@@ -66,7 +66,16 @@ export default {
 				warning: 'hsl(var(--warning))',
 				info: 'hsl(var(--info))',
 				hover: 'hsl(var(--hover))',
-				active: 'hsl(var(--active))'
+				active: 'hsl(var(--active))',
+				// Added: code color tokens so utilities like bg-code-bg, border-code-border, text-code-keyword exist
+				code: {
+					bg: 'hsl(var(--code-bg))',
+					border: 'hsl(var(--code-border))',
+					keyword: 'hsl(var(--code-keyword))',
+					string: 'hsl(var(--code-string))',
+					comment: 'hsl(var(--code-comment))',
+					number: 'hsl(var(--code-number))',
+				},
 			},
 			borderRadius: {
 				lg: 'var(--radius)',
